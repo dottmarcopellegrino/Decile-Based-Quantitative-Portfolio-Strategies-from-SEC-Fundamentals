@@ -1,0 +1,117 @@
+# 📊 Value vs Growth: SEC-Filings-Based Backtest (2009–2025)
+
+This repository provides a complete and reproducible pipeline for evaluating **fundamental-based equity strategies** (Value and Momentum) using raw 10-K filings from the SEC EDGAR system. No commercial datasets (e.g. Compustat or CRSP) are required.
+
+The pipeline extracts accounting data directly from `sub.txt` and `num.txt`, maps CIK to tickers, downloads historical price data, forms portfolios based on valuation and momentum deciles, and performs out-of-sample backtests over 2009–2025.
+
+---
+
+## 📁 Folder Structure
+
+.
+├── run_pipeline.py # Main execution file for the entire pipeline
+├── output files (CSV) in: # /Dataset Analisi Paper/
+│ ├── fundamentals_raw_2009_2025.csv
+│ ├── fundamentals_with_ticker_2009_2025.csv
+│ ├── stock_prices_monthly_long_2009_2025.csv
+│ ├── indicators_2009_2025.csv
+│ ├── portfolios_2009_2025.csv
+│ ├── backtest_2009_2025.csv
+│ ├── backtest_by_year_2009_2025.csv
+│ ├── backtest_spreads_2009_2025.csv
+│ └── monthly_portfolio_returns.csv
+├── figs/
+│ ├── fig1_portfolio_returns.png
+│ ├── fig2_boxplot_returns.png
+│ └── fig3_long_short_spreads.png
+└── README.md
+
+yaml
+Copia codice
+
+---
+
+## ⚙️ Dependencies
+
+Install Python dependencies with:
+
+```bash
+pip install -r requirements.txt
+Main packages:
+
+pandas, numpy, matplotlib, seaborn
+
+yfinance
+
+statsmodels
+
+scipy, tqdm
+
+🚀 How to Run
+All steps are automated in run_pipeline.py.
+
+1. Set your base directory
+Edit the BaseConfig class in the script to match your local folder structure (where your sub.txt and num.txt files are).
+
+python
+Copia codice
+base_dir: Path = Path("/your/local/path/to/SEC/files")
+ticker_csv: Path = Path("/your/local/path/to/Ticker.csv")
+2. Run the pipeline
+bash
+Copia codice
+python run_pipeline.py
+This will:
+
+Parse all available 10-K SEC filings
+
+Extract fundamentals and calculate EPS, PE, ROE, etc.
+
+Map CIKs to stock tickers
+
+Download monthly prices from Yahoo Finance
+
+Construct decile-based value and momentum portfolios
+
+Run out-of-sample backtests for FY+1
+
+Save all results as CSVs
+
+Generate a manifest.json with paths and shapes
+
+📈 Figures and Analysis
+After running the pipeline, you can run the separate scripts or notebooks provided to:
+
+Plot annual returns and spreads (fig1, fig2, fig3)
+
+Perform t-tests and Wilcoxon rank-sum tests for statistical validation
+
+Run Fama–French 3-factor regressions on excess returns
+
+Compare results across two subperiods: 2009–2016 vs 2017–2024
+
+🧪 Key Features
+✅ No commercial data — everything from SEC EDGAR + Yahoo Finance
+
+✅ Automatically computes compound annual returns from monthly data
+
+✅ Handles missing or problematic tickers gracefully
+
+✅ Portfolio returns are winsorized to reduce outlier impact
+
+✅ Compatible with Python 3.9+
+
+📎 Data Sources
+SEC EDGAR 10-K filings: raw sub.txt and num.txt (downloaded manually or via OpenEDGAR scripts)
+
+Yahoo Finance: monthly prices
+
+Kenneth French Data Library: Fama–French factors (US_Factors.csv)
+
+📌 Citation
+If you use this code, please cite:
+
+Pellegrino, M. (2025). Accounting-Based Anomalies Revisited: A Ground-Truth, Out-of-Sample Evaluation from SEC Filings. SSRN Working Paper.
+
+📬 Contact
+For questions or contributions, feel free to open an issue or contact [dott.marco.pellegrino@gmail.com].
